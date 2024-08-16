@@ -17,7 +17,14 @@ def clear_screen():
     # For macOS and Linux
     else:
         _ = os.system('clear')
-    
+
+def weighted_chest_choice():
+    items = ['potion', 'sword', 'shield']
+    weights = [0.6, 0.2, 0.1]
+
+    chosen = random.choices(items, weights, k=1)
+    return chosen
+
         
 def draw_grid(g, width=2):
     for y in range(g.height):  
@@ -73,6 +80,13 @@ def gen_level(curr_stage, max_stage):
             g.move_enemy()
         if(d == 'e'):
             inventory()
+            inv_sel = input('Selected Item:')
+            index=0
+            for x in c.items:
+                if(inv_sel == str(index+1)):
+                    print('You selected the '+ c.items[index])
+                index+=1
+            input()
         h.clear_screen()
         if(g.battle_radius() == True and g.enemy.alive == True):
             battle(g.enemy)
@@ -88,14 +102,15 @@ def gen_level(curr_stage, max_stage):
         c.level+=1
 
 def chest_open():
-    print('OPENED CHEST. you received some Health')
-    player = o.Player()
-    c.health += 50
-    print(player.hp)
+    chest_drop = weighted_chest_choice()[0]
+    print('OPENED CHEST. you received a '+ chest_drop)
+    c.items.append(weighted_chest_choice()[0])
+    #player = o.Player()
+    #c.health += 50
+    #print(player.hp)
 
 def inventory():
-    p.inventory()
-    input('press button to continue...')
+    p.inventory(c.items)
 
 def battle(enemy_alive):
     player = o.Player()

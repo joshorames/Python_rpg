@@ -5,3 +5,4 @@ map_size = 20
 level = 1
 max_stage=2
 health=100
+items=[]

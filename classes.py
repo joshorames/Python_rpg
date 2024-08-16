@@ -13,13 +13,16 @@ class Chest:
     def __init__(self, pos, show):
         self.pos = pos
         self.show = show
-        self.items = ['cat']
+        self.items = ['potion']
         
 class Equipment:
         def __init__(self):
-            self.name = 'item'
-            self.health = 10
-            self.attack = 10
+            self.name = h.weighted_chest_choice()
+            self.health = 0
+            self.attack = 0
+        def use_item():
+            print("used item"+ self.name)
+        
 
 class Player:
     def __init__(self):

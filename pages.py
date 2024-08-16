@@ -66,11 +66,22 @@ def battle_page():
                      / |   \_____\                  /_____/   | \
                      `-'                                      '-`                       
         """)
-def inventory():
-    print(r"""
-╔═════════════════════════════════════╗
-║ Inventory                           ║
-║╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗║
-║║1  ║2  ║3  ║4  ║5  ║6  ║7  ║8  ║9  ║║
-║╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝║
-╚═════════════════════════════════════╝""")
+    
+def inv_bar(num_of_items):
+    arr = []
+    for i in range(num_of_items):
+        arr.append('=')
+    string = ''.join(str(x) for x in arr)
+    return string
+    
+def inventory(items):
+    items_copy=items
+    number = len(items_copy)
+    while(number < 6):
+        items_copy.append('[]')
+        number+=1
+    print("""Inventory""")
+    if(items_copy):
+        print('╔'+inv_bar(len(items_copy[0]))+'╦'+inv_bar(len(items_copy[1]))+'╦'+inv_bar(len(items_copy[2]))+'╦'+inv_bar(len(items_copy[3]))+'╦'+inv_bar(len(items_copy[4]))+'╦'+inv_bar(len(items_copy[5]))+'╗')
+        print('║'+str(items_copy[0])+'║'+str(items_copy[1])+'║'+str(items_copy[2])+'║'+str(items_copy[3])+'║'+str(items[4])+'║'+str(items_copy[5])+'║')
+        print('╚'+inv_bar(len(items_copy[0]))+'╩'+inv_bar(len(items_copy[1]))+'╩'+inv_bar(len(items_copy[2]))+'╩'+inv_bar(len(items_copy[3]))+'╩'+inv_bar(len(items_copy[4]))+'╩'+inv_bar(len(items_copy[5]))+'╝')
