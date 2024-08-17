@@ -9,6 +9,7 @@ import constants as c
 import pages as p
 import classes as o
 import helpers as h
+import dictionary as d
 
 def clear_screen():
     # For Windows
@@ -18,9 +19,12 @@ def clear_screen():
     else:
         _ = os.system('clear')
 
-def weighted_chest_choice():
-    items = ['potion', 'sword', 'shield']
-    weights = [0.6, 0.2, 0.1]
+def weighted_choice(dict):
+    items=[]
+    weights=[]
+    for key, value in dict.items() :
+        items.append(key)
+        weights.append(value)
 
     chosen = random.choices(items, weights, k=1)
     return chosen
@@ -102,12 +106,9 @@ def gen_level(curr_stage, max_stage):
         c.level+=1
 
 def chest_open():
-    chest_drop = weighted_chest_choice()[0]
-    print('OPENED CHEST. you received a '+ chest_drop)
-    c.items.append(weighted_chest_choice()[0])
-    #player = o.Player()
-    #c.health += 50
-    #print(player.hp)
+    chest_drop = weighted_choice(d.chest_drop_chances)[0]
+    print('You Have oped a chest. You received a ['+ chest_drop+']')
+    c.items.append(chest_drop)
 
 def inventory():
     p.inventory(c.items)
@@ -117,7 +118,7 @@ def battle(enemy_alive):
     enemy = o.Enemy()
     while enemy.hp > 0 and player.hp > 0:
         print("Commence Battle!")
-        print("Lvl: "+ str(player.lvl))
+        print("Lvl: "+ str(player.lvl)+ "                                               Enemy LVL: "+ str(enemy.lvl))
         print("Exp: "+ str(player.exp))
         print("HP: "+ str(player.hp)+ "                                               Enemy HP: "+ str(enemy.hp))
         p.battle_page()
@@ -125,7 +126,7 @@ def battle(enemy_alive):
         print('(2) ' + player.attacks[1])
         print('(3) ' + player.attacks[2])
         attack = input()
-        enemy.damaged(player.attack(attack))
+        enemy.damaged(int(player.attack(attack)))
         player.damaged(enemy.attack())
         h.clear_screen()
     if(player.hp <= 0):

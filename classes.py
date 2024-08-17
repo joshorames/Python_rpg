@@ -3,11 +3,14 @@ import subprocess
 import platform
 import random
 import constants as c
+import helpers as h
+import dictionary as d
 
 class Enemy_Object():
     def __init__(self, pos, alive):
         self.pos = pos
         self.alive = alive
+        self.lvl = c.level
 
 class Chest:
     def __init__(self, pos, show):
@@ -22,31 +25,49 @@ class Equipment:
             self.attack = 0
         def use_item():
             print("used item"+ self.name)
-        
 
 class Player:
     def __init__(self):
         self.hp = c.health
-        self.exp = 0
+        self.exp = c.exp
         self.lvl = 1
-        self.attacks = ['slash', 'stab', 'smash']
+        self.attacks = c.attacks
     def level_up(self):
-        self.hp += 20
-        self.lvl += 1
+        self.hp = c.health
+        self.lvl = c.level
         print('LEVELED UP TO LVL ' + str(self.lvl))
+        c.health+=100
+        attack_learned = h.weighted_choice(d.attack_learn_chances)[0]
+        if(attack_learned != 'none' ):
+            print('You learned '+attack_learned+' attack')
+            duplicated_att=''
+            for att in c.attacks:
+                if(attack_learned == att):
+                    duplicated_att=att
+                    print('You already know this move.')
+                    break
+            if(len(c.attacks) < 3 and duplicated_att==''):
+                c.attacks.append(attack_learned)
+            if(duplicated_att == '' and attack_learned != 'none'):
+                print('Too many skills...')
+                skill_replace = input('Choose a  skill to replace: ')
+                for x in range(4):
+                    if(skill_replace == str(x+1)):
+                        c.attacks[x] = attack_learned
+                        
+                
     def damaged(self, lost_hp):
         self.hp -= lost_hp
     def attack(self, user_input):
-        switcher = {
-            '1': 5,
-            '2': 10,
-            '3': 20,
-        }
-        return switcher.get(user_input, 0)
+        for x in range(4):
+            if(user_input == str(x+1)):
+                sel_attack = c.attacks[int(user_input)-1]
+                attack_damage = d.attacks_by_damage[sel_attack]
+                return int(attack_damage)
 
 class Enemy:
     def __init__(self):
-        self.hp = c.level * 100
+        self.hp = d.monster_hp_by_level[c.level]
         self.lvl = c.level
         self.attacks = ['a', 'b', 'c']
     def damaged(self, lost_hp):
